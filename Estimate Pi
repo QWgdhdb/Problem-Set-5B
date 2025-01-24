@@ -1,0 +1,53 @@
+import java.util.*;
+public class EstimatePi
+{
+    public static class Fraction {
+        private int numerator;
+        private int denominator;
+
+        public Fraction(int numerator, int denominator) {
+            this.numerator = numerator;
+            this.denominator = denominator;
+        }
+
+        public double toDouble() {
+            return (double) numerator / denominator;
+        }
+
+        public int getNumerator() {
+            return numerator;
+        }
+
+        public int getDenominator() {
+            return denominator;
+        }
+
+      
+        public String toString() {
+            return numerator + "/" + denominator;
+        }
+    }
+    public class EstimatePi {
+        public static void main(String[] args) {
+            final double PI = Math.PI;
+            final double EPSILON = Math.abs(PI - (355.0 / 113.0)); // Difference between PI and Milü approximation
+
+            int numerator = 355;
+            int denominator = 113;
+
+            Fraction bestApproximation = new Fraction(numerator, denominator);
+
+            while (true) {
+                Fraction largerNumerator = new Fraction(bestApproximation.getNumerator() + 1, bestApproximation.getDenominator());
+                Fraction largerDenominator = new Fraction(bestApproximation.getNumerator(), bestApproximation.getDenominator() + 1);
+
+                if (Math.abs(PI - largerNumerator.toDouble()) < EPSILON) {
+                    bestApproximation = largerNumerator;
+                } else if (Math.abs(PI - largerDenominator.toDouble()) < EPSILON) {
+                    bestApproximation = largerDenominator;
+                }
+            }
+
+        }
+    }
+}
