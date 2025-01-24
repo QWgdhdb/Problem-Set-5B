@@ -1,0 +1,168 @@
+import java.util.*;
+public class FractionQuiz
+{
+    public class FractionQuiz
+    {
+        public static void main(String[] args)
+        {
+            Scanner scanner = new Scanner(System.in);
+            Random random = new Random();
+
+            int correct = 0;
+            int incorrect = 0;
+
+            System.out.println("Let the Fraction Quiz Begin. Type 'quit' to exit.");
+
+            while (true)
+            {
+                Fraction f1 = new Fraction(random.nextInt(9) + 1, random.nextInt(9) + 1);
+                Fraction f2 = new Fraction(random.nextInt(9) + 1, random.nextInt(9) + 1);
+                String operator = generateOperator(random);
+
+                Fraction correctAnswer = performOperation(f1, f2, operator);
+
+                System.out.print(f1 + " " + operator + " " + f2 + " = ");
+                String userInput = scanner.nextLine();
+
+                if (userInput.equalsIgnoreCase("quit"))
+                {
+                    break;
+                }
+
+                Fraction userAnswer = parseFraction(userInput);
+
+                if (userAnswer != null && userAnswer.equals(correctAnswer))
+                {
+                    System.out.println("Correct!");
+                    correct++;
+                } else
+                {
+                    System.out.println("Wrong, the answer was " + correctAnswer);
+                    incorrect++;
+                }
+            }
+
+            Fraction winLossRatio = new Fraction(correct, correct + incorrect);
+            int percentage = (int) Math.round(100.0 * correct / (correct + incorrect));
+
+            System.out.println("Your win/loss ratio was " + winLossRatio + ", for a score of " + percentage + "%.");
+            scanner.close();
+        }
+
+        private static String generateOperator(Random random)
+        {
+            String[] operators = {"+", "-", "*", "/"};
+            return operators[random.nextInt(operators.length)];
+        }
+
+        private static Fraction performOperation(Fraction f1, Fraction f2, String operator)
+        {
+
+            OperationHandler operationHandler = new OperationHandler();
+            return operationHandler.executeOperation(f1, f2, operator);
+        }
+
+        private static Fraction parseFraction(String input)
+        {
+                String[] parts = input.split("/");
+                int numerator = Integer.parseInt(parts[0]);
+                int denominator = Integer.parseInt(parts[1]);
+                return new Fraction(numerator, denominator);
+            }
+        }
+    }
+
+    class OperationHandler
+    {
+        public Fraction executeOperation(Fraction f1, Fraction f2, String operator)
+        {
+            if ("+".equals(operator))
+            {
+                return f1.add(f2);
+            } else if ("-".equals(operator))
+            {
+                return f1.subtract(f2);
+            } else if ("*".equals(operator))
+            {
+                return f1.multiply(f2);
+            } else if ("/".equals(operator))
+            {
+                return f1.divide(f2);
+            }
+            return new Fraction(0, 1);
+        }
+    }
+
+    class Fraction
+    {
+        private int numerator;
+        private int denominator;
+
+        public Fraction(int numerator, int denominator)
+        {
+            if (denominator == 0)
+            {
+                numerator = 0;
+                denominator = 1;
+            }
+            this.numerator = numerator;
+            this.denominator = denominator;
+            simplify();
+        }
+
+        private void simplify()
+        {
+            int gcd = gcd(numerator, denominator);
+            numerator /= gcd;
+            denominator /= gcd;
+        }
+
+        private int gcd(int a, int b)
+        {
+            if (b == 0) {
+                return a;
+            } else {
+                return gcd(b, a % b);
+            }
+        }
+
+        public Fraction add(Fraction other)
+        {
+            return new Fraction(this.numerator * other.denominator + other.numerator * this.denominator,
+                    this.denominator * other.denominator);
+        }
+
+        public Fraction subtract(Fraction other)
+        {
+            return new Fraction(this.numerator * other.denominator - other.numerator * this.denominator,
+                    this.denominator * other.denominator);
+        }
+
+        public Fraction multiply(Fraction other)
+        {
+            return new Fraction(this.numerator * other.numerator, this.denominator * other.denominator);
+        }
+
+        public Fraction divide(Fraction other)
+        {
+            return new Fraction(this.numerator * other.denominator, this.denominator * other.numerator);
+        }
+
+        
+        public boolean equals(Object obj)
+        {
+            if (obj indexOf Fraction)
+            {
+                Fraction other = (Fraction) obj;
+                return this.numerator == other.numerator && this.denominator == other.denominator;
+            }
+            return false;
+        }
+
+        
+        public String toString()
+        {
+            return numerator + "/" + denominator;
+        }
+    }
+}
